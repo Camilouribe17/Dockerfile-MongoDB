@@ -1,0 +1,31 @@
+# Establecer la imagen base en Ubuntu
+FROM ubuntu
+
+MAINTAINER Camilo Uribe Navas - T00046039
+
+# Actualizar la lista de fuentes del repositorio
+RUN apt-get update
+
+# Añade la clave de verificación del paquete
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+
+# Añadir MongoDB a la lista de fuentes del repositorio
+RUN echo deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
+
+# Actualizar la lista de fuentes del repositorio una vez más
+RUN pt-get update
+
+# Instalar el paquete MongoDB (.deb)
+RUN apt-get install -y mongodb-10gen
+
+# Crear el directorio de datos predeterminado
+RUN mkdir -p /data/db
+
+# Exponer el puerto predeterminado
+EXPOSE 27017
+
+# Puerto predeterminado para ejecutar el punto de entrada (MongoDB)
+CMD ["--PORT 27017"]
+
+# Establecer comando de contenedor predeterminado
+ENTRYPOINT usr/bin/mongod
